@@ -1,6 +1,41 @@
-name: prova teste deploy
+name: Build, Release & Deploy to Pages
 
 on:
   push:
     branches: [ "main" ]
 
+jobs:
+  build_index:
+    name: Create deploy index
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload artifact for next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: index.html
+          path: release.zip
+
+  deploy_pages:
+    name: Deploy to GitHub Pages
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site content
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
