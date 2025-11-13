@@ -1,0 +1,6 @@
+name: prova teste deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
